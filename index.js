@@ -7,13 +7,14 @@ const path = require('path')
 const adminRouter = require('./routes/admin.router')
 const testRouter = require('./routes/test.router')
 const mysql = require('mysql')
+const config = require('./config')
 
 
 app.use(cors())
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}))
 app.use(bodyParser.json({limit: '5mb'}))
 
-const PORT = 5000
+const PORT = config.port || 5000
 
 app.listen(PORT, ()=> {
     console.log(`Server started on port ${PORT}...`)
