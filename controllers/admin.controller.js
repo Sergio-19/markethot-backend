@@ -3,6 +3,7 @@ const fs = require('fs')
 const mysql = require('mysql')
 const databaseQuery = require('../database')
 const config = require('../config')
+const YooKassa = require('yookassa');
 
 
 class Admin {
@@ -206,6 +207,28 @@ class Admin {
     async postOrder(req, res) {
         const order = JSON.parse(req.body.order)
         const goods =  JSON.stringify(order.goods)
+
+        const yooKassa = new YooKassa({
+            shopId: '959719',
+            secretKey: 'test_88g8WxI5h6nuEJmI44ardL6YsTnZx2VCCbSGAEAwPiE'
+        });
+
+        const payment = await yooKassa.createPayment({
+            amount: {
+              value: `${order.sum}.00`,
+              currency: "RUB"
+            },
+            payment_method_data: {
+                type: "bank_card"
+            },
+            confirmation: {
+              type: "redirect",
+              return_url: "https://hopastore.ru"
+            },
+            description: `Заказ №${order.order}, ${order.email || ''}`
+        });
+
+
       if(req.body.order) {
 
         const connection =  await mysql.createConnection({
@@ -271,14 +294,17 @@ class Admin {
                     console.log(dat)
                 })
             } else {
-                user2.then((dat)=>{
+                user3.then((dat)=>{
                     console.log(dat)
                 })
             }
         })
 
        
-        res.json({'message': `Заказ № ${order.order} сохранен в базе данных`})
+        res.json({'message': `Заказ № ${order.order} сохранен в базе данных`, 
+                  "payment": payment,
+                  "order": order  
+                })
 
         await connection.end((error)=> {
             if(error){

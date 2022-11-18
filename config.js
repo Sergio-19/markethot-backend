@@ -1,11 +1,12 @@
 
 const config = {
+            // port: "5000",
             // host: 'localhost',
             // user: 'root',
             // password: 'root',
             // database: 'markethot'
 
-            port: "8080",
+            port: "5000",
             host: 'stended3.beget.tech',
             user: 'stended3_rudemy',
             password: 'Se549297',
