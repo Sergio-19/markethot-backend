@@ -209,8 +209,8 @@ class Admin {
         const goods =  JSON.stringify(order.goods)
 
         const yooKassa = new YooKassa({
-            shopId: '959719',
-            secretKey: 'test_88g8WxI5h6nuEJmI44ardL6YsTnZx2VCCbSGAEAwPiE'
+            shopId: config.shopid,
+            secretKey: config.apikey
         });
 
         const payment = await yooKassa.createPayment({
